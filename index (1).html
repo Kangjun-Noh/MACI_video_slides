@@ -3,207 +3,372 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MACI | Kangjun Noh</title>
-  <meta name="description" content="MACI: Multi-LLM Adaptive Conformal Inference for Reliable LLM Responses">
+  <title>MACI | Slides & Video</title>
+  <meta name="description" content="Slides and video for the MACI paper">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0f0f11;
-      --card: rgba(255,255,255,0.04);
-      --text: #ffffff;
-      --muted: #a0a0a0;
-      --border: rgba(255,255,255,0.1);
+      --panel: #151518;
+      --text-main: #ffffff;
+      --text-muted: #a0a0a0;
+      --border: rgba(255,255,255,0.10);
+      --accent: #ffffff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
-      background: var(--bg);
-      color: var(--text);
       font-family: 'Inter', sans-serif;
-      line-height: 1.7;
+      background: var(--bg);
+      color: var(--text-main);
+      overflow: hidden;
     }
     a { color: inherit; text-decoration: none; }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
-    header {
-      padding: 28px 0;
+    .page {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+    .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border);
+      background: rgba(15,15,17,0.92);
+      backdrop-filter: blur(8px);
     }
-    .home-link { color: var(--muted); }
-    .hero {
-      padding: 72px 0 56px;
-      display: grid;
-      gap: 28px;
-    }
-    .eyebrow {
-      font-size: 0.85rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    h1 {
-      font-size: clamp(2.4rem, 6vw, 4.5rem);
-      line-height: 1.05;
-      letter-spacing: -1.5px;
-    }
-    .subtitle {
-      max-width: 800px;
-      font-size: 1.15rem;
-      color: var(--muted);
-    }
-    .button-row {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-    .btn {
-      padding: 12px 18px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: var(--card);
-      transition: 0.25s ease;
-      font-weight: 600;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.35);
-    }
-    section {
-      padding: 42px 0;
-      border-top: 1px solid var(--border);
-    }
-    .section-title {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--muted);
-      margin-bottom: 18px;
-    }
-    .grid {
-      display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-    }
-    .card h3 {
+    .topbar h1 {
       font-size: 1rem;
-      margin-bottom: 8px;
+      line-height: 1.3;
+      font-weight: 700;
     }
-    .card p, p, li { color: var(--muted); }
-    .authors {
-      color: var(--muted);
-      font-size: 0.98rem;
+    .topbar p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
-    ul { padding-left: 18px; }
-    .bibtex {
-      background: #0a0a0b;
+    .home-link {
+      font-size: 0.9rem;
+      color: var(--text-muted);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.92rem;
-      color: #d8d8d8;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+      white-space: nowrap;
     }
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 30px 0 48px;
-      color: var(--muted);
+    .home-link:hover {
+      color: var(--text-main);
+      border-color: rgba(255,255,255,0.25);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 0;
+    }
+    .panel {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .panel:last-child {
+      border-right: none;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .panel-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      overflow: hidden;
+      background: #0b0b0c;
+    }
+    .video-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .video-wrap iframe,
+    .video-wrap video {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+    .slide-viewer {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .slide-canvas-wrap {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      background: #111;
+      border-radius: 10px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+      padding: 8px;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .controls button {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-main);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .controls button:hover:not(:disabled) {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.22);
+    }
+    .controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .page-num {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      min-width: 84px;
+      text-align: center;
+    }
+    .hint {
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      opacity: 0.85;
+    }
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .page { height: auto; min-height: 100vh; }
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+      }
+      .panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .panel:last-child {
+        border-bottom: none;
+      }
+      .panel-body {
+        min-height: 52vh;
+      }
+      .hint {
+        position: static;
+        display: block;
+        text-align: center;
+        padding: 0 0 16px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div><strong>MACI</strong></div>
+  <div class="page">
+    <div class="topbar">
+      <div>
+        <h1>Enhancing Causal Discovery in Chronic Diseases: The MAGIC Framework Using Multiple LLMs</h1>
+        <p>Slides & Video</p>
+      </div>
       <a class="home-link" href="../../index.html">← Back to homepage</a>
-    </header>
+    </div>
 
-    <section class="hero" style="border-top: none;">
-      <div class="eyebrow">Project Page</div>
-      <h1>Multi-LLM Adaptive Conformal Inference for Reliable LLM Responses</h1>
-      <div class="authors">Kangjun Noh, Seongchan Lee, Ilmun Kim, Kyungwoo Song</div>
-      <p class="subtitle">
-        MACI studies how to make LLM responses more reliable by combining adaptive filtering, conformal inference,
-        and multi-LLM signals to control risk while retaining useful responses.
-      </p>
-      <div class="button-row">
-        <a class="btn" href="#" target="_blank" rel="noopener">Paper</a>
-        <a class="btn" href="#" target="_blank" rel="noopener">Code</a>
-        <a class="btn" href="#" target="_blank" rel="noopener">Poster / Slides</a>
-        <a class="btn" href="mailto:shwndnjs58@yonsei.ac.kr">Contact</a>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-title">Overview</div>
-      <p>
-        Large language models are increasingly used in settings where incorrect outputs can be costly. MACI is built around a simple goal:
-        retain helpful model outputs while filtering out unreliable ones with statistical guarantees.
-      </p>
-    </section>
-
-    <section>
-      <div class="section-title">Key Ideas</div>
-      <div class="grid">
-        <div class="card">
-          <h3>Adaptive filtering</h3>
-          <p>Use confidence-aware rules to decide which generations should be retained or filtered.</p>
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-header">
+          <span>Video</span>
+          <span>You can keep the video playing while navigating slides</span>
         </div>
-        <div class="card">
-          <h3>Conformal control</h3>
-          <p>Calibrate the filtering rule so the retained set satisfies a target reliability level.</p>
+        <div class="panel-body">
+          <div class="video-wrap">
+            <!-- Replace the iframe src below with your YouTube/SlidesLive/Vimeo embed URL.
+                 Example (YouTube): https://www.youtube.com/embed/VIDEO_ID
+                 If you want to use a local MP4 instead, comment out the iframe and use the <video> tag below. -->
+            <iframe
+              src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+              title="MACI presentation video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+
+            <!-- Example for local MP4 (uncomment if needed)
+            <video controls>
+              <source src="video.mp4" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
+            -->
+          </div>
         </div>
-        <div class="card">
-          <h3>Multi-LLM signals</h3>
-          <p>Aggregate multiple model judgments to obtain a more stable estimate of response reliability.</p>
+      </section>
+
+      <section class="panel" style="position:relative;">
+        <div class="panel-header">
+          <span>Slides</span>
+          <span>Use ← / → keys or the buttons below</span>
         </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-title">Abstract</div>
-      <p>
-        <!-- Replace this paragraph with the final abstract once the public paper version is ready. -->
-        We propose MACI, a framework for improving the reliability of LLM outputs through adaptive conformal filtering.
-        The method combines multiple LLM-based signals and a calibrated decision rule to selectively retain responses that satisfy a target factuality or correctness criterion.
-        MACI is designed for practical use when users care about both statistical reliability and response retention.
-      </p>
-    </section>
-
-    <section>
-      <div class="section-title">Resources</div>
-      <ul>
-        <li>Add the public paper URL to the “Paper” button above.</li>
-        <li>Add the GitHub repository URL to the “Code” button above.</li>
-        <li>Add poster, slides, or video links once available.</li>
-        <li>You can also place teaser figures in this folder and reference them with relative paths.</li>
-      </ul>
-    </section>
-
-    <section>
-      <div class="section-title">Citation</div>
-      <div class="bibtex">@inproceedings{noh2026maci,
-  title     = {Multi-LLM Adaptive Conformal Inference for Reliable LLM Responses},
-  author    = {Noh, Kangjun and Lee, Seongchan and Kim, Ilmun and Song, Kyungwoo},
-  booktitle = {International Conference on Learning Representations (ICLR)},
-  year      = {2026}
-}</div>
-    </section>
-
-    <footer>
-      © 2026 Kangjun Noh · MACI project page
-    </footer>
+        <div class="panel-body">
+          <div class="slide-viewer">
+            <div class="slide-canvas-wrap">
+              <canvas id="pdf-canvas"></canvas>
+            </div>
+            <div class="controls">
+              <button id="prev">← Prev</button>
+              <div id="page-num" class="page-num">Page 1 / 1</div>
+              <button id="next">Next →</button>
+            </div>
+          </div>
+        </div>
+        <div class="hint">Place <code>slides.pdf</code> in this same folder.</div>
+      </section>
+    </div>
   </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    const url = 'slides.pdf';
+    const pdfjsLib = window['pdfjs-dist/build/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    const scale = 1.5;
+    const canvas = document.getElementById('pdf-canvas');
+    const ctx = canvas.getContext('2d');
+    const pageNumEl = document.getElementById('page-num');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+
+    function updateControls() {
+      if (!pdfDoc) return;
+      pageNumEl.textContent = `Page ${pageNum} / ${pdfDoc.numPages}`;
+      prevBtn.disabled = pageNum <= 1;
+      nextBtn.disabled = pageNum >= pdfDoc.numPages;
+    }
+
+    function renderPage(num) {
+      pageRendering = true;
+      pdfDoc.getPage(num).then(function(page) {
+        const viewport = page.getViewport({ scale });
+        const containerWidth = document.querySelector('.slide-canvas-wrap').clientWidth - 20;
+        const fitScale = Math.min(scale, containerWidth / viewport.width);
+        const scaledViewport = page.getViewport({ scale: fitScale });
+
+        canvas.height = scaledViewport.height;
+        canvas.width = scaledViewport.width;
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: scaledViewport
+        };
+
+        const renderTask = page.render(renderContext);
+        renderTask.promise.then(function() {
+          pageRendering = false;
+          if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
+          updateControls();
+        });
+      });
+    }
+
+    function queueRenderPage(num) {
+      if (pageRendering) {
+        pageNumPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
+
+    function onPrevPage() {
+      if (pageNum <= 1) return;
+      pageNum--;
+      queueRenderPage(pageNum);
+    }
+
+    function onNextPage() {
+      if (pageNum >= pdfDoc.numPages) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    }
+
+    prevBtn.addEventListener('click', onPrevPage);
+    nextBtn.addEventListener('click', onNextPage);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') onPrevPage();
+      if (e.key === 'ArrowRight') onNextPage();
+    });
+
+    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+      pdfDoc = pdfDoc_;
+      updateControls();
+      renderPage(pageNum);
+    }).catch(function(error) {
+      document.querySelector('.slide-canvas-wrap').innerHTML = `
+        <div style="color:#a0a0a0; text-align:center; padding:24px; line-height:1.8;">
+          <div style="font-size:1rem; color:#fff; margin-bottom:10px;">Could not load <code>slides.pdf</code>.</div>
+          <div>Put your slide PDF in this same folder:</div>
+          <div style="margin-top:6px;"><code>projects/maci/slides.pdf</code></div>
+        </div>
+      `;
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      pageNumEl.textContent = 'Slides not found';
+      console.error(error);
+    });
+
+    window.addEventListener('resize', function() {
+      if (pdfDoc) queueRenderPage(pageNum);
+    });
+  </script>
 </body>
 </html>
